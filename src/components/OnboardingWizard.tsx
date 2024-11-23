@@ -12,13 +12,15 @@ import {
   CardTitle,
 } from "./ui/card";
 
+const API_BASE_URL = process.env.API_URL;
+
 type UserDataSchema = Partial<
   StepOneFormSchema & StepTwoFormSchema & StepThreeFormSchema
 >;
 
 export default function OnboardingWizard() {
   const [step, setStep] = useState(1);
-  const [userData, setUserData] = useState<UserDataSchema>();
+  const [userData, setUserData] = useState<UserDataSchema>({});
 
   const handleNext = () => {
     if (step < 4) setStep(step + 1);
@@ -28,13 +30,17 @@ export default function OnboardingWizard() {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleSubmitData = (data: any, step: number) => {
-    // Do something with the data
-    console.log("STEP DATA", { stepData: data });
+  const handleSubmitData = async (data: any, step: number) => {
+    // Do something with the data    
     setUserData((prevData) => ({
       ...prevData,
       ...data,
     }));
+
+    console.log(`Datos acumulados después del paso ${step}:`, {
+      ...userData,
+      ...data, // Esto refleja los datos combinados
+    });
 
     // Move to next step
     handleNext();
@@ -44,6 +50,28 @@ export default function OnboardingWizard() {
       // SUBMITTING FINAL DATA
       console.log("Submitting Final Data");
       console.log({ userData });
+
+      try {
+        // Call the API with the final data
+        const response = await fetch(`${API_BASE_URL}/api/createFile`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ ...userData, ...data }),
+        });
+      
+        // Handle the response
+        if (!response.ok) {
+          throw new Error("Error sending data to the API");
+        }
+      
+        const result = await response.json();
+        console.log("API response:", result);
+      } catch (error) {
+        console.error("Error calling the API:", error);
+      }
+
     }
   };
 

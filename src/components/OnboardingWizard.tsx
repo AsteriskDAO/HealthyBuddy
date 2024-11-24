@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "./ui/card";
 
-const API_BASE_URL = process.env.API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 type UserDataSchema = Partial<
   StepOneFormSchema & StepTwoFormSchema & StepThreeFormSchema

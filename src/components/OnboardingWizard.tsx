@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 
 import { useState } from "react";
 import StepOne, { StepOneFormSchema } from "./StepOne";
@@ -81,7 +82,7 @@ export default function OnboardingWizard() {
         <CardDescription>Step {step} of 4</CardDescription>
       </CardHeader>
       <CardContent>
-        {step === 0 && <WelcomeMessage />} // Step 0: Welcome Message
+        {step === 0 && <WelcomeMessage />}
         {step === 1 && (
           <StepOne
             handleSubmitData={(data) => handleSubmitData(data, 1)}
@@ -107,5 +108,18 @@ export default function OnboardingWizard() {
 
 // New WelcomeMessage component
 function WelcomeMessage() {
-  return <h2>Welcome to the Onboarding Wizard!</h2>;
+  return (
+    <>
+      <h2>Welcome to the beta app for Asterisk Women’s Health</h2>
+
+      <p>
+        You are helping us start the process of gathering women’s health data to
+        improve our health outcomes. You will receive points for your daily
+        checkin: they will eventually convert to tokens so you can vote on our
+        healthcare focus. Thank you! Now, let’s get started.
+      </p>
+
+      <Button variant="outline">Start</Button>
+    </>
+  );
 }

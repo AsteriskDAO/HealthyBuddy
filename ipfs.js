@@ -1,6 +1,7 @@
 import express from 'express';
 import { PinataSDK } from "pinata-web3";
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config();
 
 const pinata = new PinataSDK({
@@ -11,7 +12,7 @@ const pinata = new PinataSDK({
 const app = express();
 const PORT = 5000;
 
-app.use(express.json());
+app.use(cors());
 
 app.post('/api/createFile', async (req, res) => {
   const jsonData = req.body;

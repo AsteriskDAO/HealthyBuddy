@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "./ui/card";
 
-//const API_BASE_URL = process.env.API_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 type UserDataSchema = Partial<
   StepOneFormSchema & StepTwoFormSchema & StepThreeFormSchema
@@ -51,7 +51,7 @@ export default function OnboardingWizard() {
       console.log("Submitting Final Data");
       console.log({ userData });
 
-      /*try {
+      try {
         // Call the API with the final data
         const response = await fetch(`${API_BASE_URL}/api/createFile`, {
           method: "POST",
@@ -70,7 +70,7 @@ export default function OnboardingWizard() {
         console.log("API response:", result);
       } catch (error) {
         console.error("Error calling the API:", error);
-      }*/
+      }
 
     }
   };

@@ -1,4 +1,5 @@
 "use client";
+import { Button } from "@/components/ui/button";
 
 import { useState } from "react";
 import StepOne, { StepOneFormSchema } from "./StepOne";
@@ -19,7 +20,7 @@ type UserDataSchema = Partial<
 >;
 
 export default function OnboardingWizard() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [userData, setUserData] = useState<UserDataSchema>({});
 
   const handleNext = () => {
@@ -27,11 +28,11 @@ export default function OnboardingWizard() {
   };
 
   const handlePrevious = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 0) setStep(step - 1);
   };
 
   const handleSubmitData = async (data: any, step: number) => {
-    // Do something with the data    
+    // Do something with the data
     setUserData((prevData) => ({
       ...prevData,
       ...data,
@@ -60,18 +61,17 @@ export default function OnboardingWizard() {
           },
           body: JSON.stringify({ ...userData, ...data }),
         });
-      
+
         // Handle the response
         if (!response.ok) {
           throw new Error("Error sending data to the API");
         }
-      
+
         const result = await response.json();
         console.log("API response:", result);
       } catch (error) {
         console.error("Error calling the API:", error);
       }
-
     }
   };
 
@@ -82,20 +82,19 @@ export default function OnboardingWizard() {
         <CardDescription>Step {step} of 4</CardDescription>
       </CardHeader>
       <CardContent>
+        {step === 0 && <WelcomeMessage />}
         {step === 1 && (
           <StepOne
             handleSubmitData={(data) => handleSubmitData(data, 1)}
             handleBack={handlePrevious}
           />
         )}
-
         {step === 2 && (
           <StepTwo
             handleSubmitData={(data) => handleSubmitData(data, 2)}
             handleBack={handlePrevious}
           />
         )}
-
         {step === 3 && (
           <StepThree
             handleSubmitData={(data) => handleSubmitData(data, 3)}
@@ -104,5 +103,23 @@ export default function OnboardingWizard() {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+// New WelcomeMessage component
+function WelcomeMessage() {
+  return (
+    <>
+      <h2>Welcome to the beta app for Asterisk Women’s Health</h2>
+
+      <p>
+        You are helping us start the process of gathering women’s health data to
+        improve our health outcomes. You will receive points for your daily
+        checkin: they will eventually convert to tokens so you can vote on our
+        healthcare focus. Thank you! Now, let’s get started.
+      </p>
+
+      <Button variant="outline">Start</Button>
+    </>
   );
 }
